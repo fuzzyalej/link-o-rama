@@ -1,12 +1,12 @@
 require 'goliath'
+require_relative 'server/add_new_url.rb'
 
 class Server < Goliath::API
-  use Goliath::Rack::Params
-  use Goliath::Rack::Formatters::JSON
-  use Goliath::Rack::Render
+  map '/add', AddNewUrl do
+    use Goliath::Rack::Validation::RequestMethod, %w(POST)
+  end
 
   def response(env)
-    logger.info env['params']['data']
-    [200, {}, 'ok']
+    [404, {}, "Bad request"]
   end
 end
