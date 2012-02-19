@@ -4,7 +4,7 @@ Link-O-Rama
 This is a pet project based on a happy idea we had while we were having lunch. Why don't make a competition out of it? Why not go full-stack and learn some new tricks?
 
 The Idea
-========
+--------
 
 The basic idea is to generate an app that stores links and offers basic search over them. COnsisting on the following parts:
 
@@ -14,6 +14,17 @@ The basic idea is to generate an app that stores links and offers basic search o
   - A javascript frontend of only one HTML page
 
 My chosen stack
-===============
+---------------
 Ruby, javascript, backbone.js, jquery, goliath, redis
 The main database needs some research first :D
+
+
+Description
+-----------
+Bookmarklet
+
+Backend
+  Server
+  Dispatcher
+
+Frontend

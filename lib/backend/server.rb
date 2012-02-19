@@ -1,4 +1,3 @@
-require 'goliath'
 require_relative 'server/add_new_url.rb'
 
 class Server < Goliath::API
