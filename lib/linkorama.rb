@@ -1,32 +1,24 @@
-require 'goliath'
-require_relative 'backend/server.rb'
-require_relative 'backend/dispatcher.rb'
+# This is mostly a hack to run several processes in a single heroku dyno to check the system online
 
-$PROGRAM_NAME='LOR: Base'
 processes = Hash.new
 
-processes[:dispatcher] = fork do
-  puts "Starting the dispatcher..."
-  Process.setsid
-  $PROGRAM_NAME='LOR: Dispatcher'
-  Dispatcher.new
+if processes[:dispatcher] = fork
+  puts "Forked the dispatcher"
+else
+  exec "bundle exec ruby lib/backend/dispatcher.rb -sv"
 end
 
-processes[:server] = fork do
-  puts "Starting the server..."
-  Process.setsid
-  $PROGRAM_NAME='LOR: Server'
+if processes[:server] = fork
+  puts "Forked the server"
+else
   exec "bundle exec ruby lib/backend/server.rb -sv -e prod -p $PORT"
-  #Goliath::Application.app_class = 'Server'
-  #Goliath::Application.run!
 end
-
-$stdout.flush
-
+#ADD EACH PROCESS TO REDIS QUEUE FOR STATS AND TO KEEP TRACK
+#STATS COUNTER OF WEBS TOO
+#PROCESS:DETACH???
 handler = Proc.new {
-  puts "Killing my friends!"
-  processes.keys.each do |pid|
-    Process.kill "INT", pid
+  processes.values.each do |pid|
+    Process.kill :TERM, pid
   end
   exit
 }
@@ -34,3 +26,6 @@ handler = Proc.new {
 trap(:INT) { handler.call }
 trap(:QUIT) { handler.call }
 trap(:TERM) { handler.call }
+
+# Keep on waiting for a process to die (the end of the program)
+2.times { Process.waitpid -1 }

@@ -1,3 +1,4 @@
+require 'goliath'
 require_relative '../../config.rb'
 
 class AddNewUrl < Goliath::API
