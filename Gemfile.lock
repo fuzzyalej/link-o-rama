@@ -3,6 +3,9 @@ GEM
   specs:
     async-rack (0.5.1)
       rack (~> 1.1)
+    bson (1.5.2)
+    bson_ext (1.5.2)
+      bson (= 1.5.2)
     em-synchrony (1.0.0)
       eventmachine (>= 1.0.0.beta.1)
     eventmachine (1.0.0.beta.4)
@@ -26,7 +29,10 @@ GEM
       rack (>= 1.0.0)
       url_mount (~> 0.2.1)
     log4r (1.1.10)
+    mongo (1.5.2)
+      bson (= 1.5.2)
     multi_json (1.0.4)
+    nokogiri (1.5.0)
     rack (1.4.1)
     rack-accept-media-types (0.9)
     rack-contrib (1.1.0)
@@ -43,8 +49,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bson_ext
   em-synchrony
   foreman
   goliath
   hiredis
+  mongo
+  nokogiri
   redis
