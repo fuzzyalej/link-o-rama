@@ -1,10 +1,11 @@
 require 'net/http'
 require 'open-uri'
 require 'nokogiri'
-require 'mongo'
 require_relative 'page'
+require_relative 'config/redis'
+require_relative 'config/mongo'
 
-module Analynkze
+module Linkorama
   class Worker
     def initialize(url)
       $PROGRAM_NAME = "Worker-#{url}"
@@ -14,21 +15,15 @@ module Analynkze
     end
 
     def run!
-      puts "Parsing #{@url}"
-      #check that url is not in
-      # - pending
-      # - doing
-      # - added
-      url_not_previously_done or raise "#Already done: #{@url}"
+      puts "[#{name}] Parsing #{@url}"
+      url_not_previously_done or raise "[#{name}] Already done: #{@url}"
 
       doc = Nokogiri::HTML(open(@url))
       page = Page.new @url
       page.title = doc.css('title').text
       page.keywords = doc.search('//text()').text.downcase.scan(/\w+/).sort.uniq
 
-      #Objectize the DB access
-      db = Mongo::Connection.new.db('linkorama')
-      col = db['pages']
+      col = DB::MONGO.db['pages']
       col.insert(page.to_json)
 
       url_done
@@ -46,19 +41,23 @@ module Analynkze
     private
 
     def url_not_previously_done
-      REDIS.sismember('done', @url) ? nil : true
+      DB::REDIS.sismember('done', @url) ? nil : true
     end
 
     def url_done
-      REDIS.sadd('done', @url)
+      DB::REDIS.sadd('done', @url)
     end
 
     def register_self
-      REDIS.lpush 'workers', Process.pid
+      DB::REDIS.lpush 'workers', Process.pid
     end
 
     def unregister_self
-      REDIS.lrem 'workers', 0, Process.pid
+      DB::REDIS.lrem 'workers', 0, Process.pid
+    end
+
+    def name
+      "worker-#{Process.pid}"
     end
   end
 end

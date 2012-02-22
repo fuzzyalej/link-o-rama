@@ -1,4 +1,4 @@
-module Analynkze
+module Linkorama
   STOPWORDS = %W[
     a
     able

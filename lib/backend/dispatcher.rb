@@ -1,29 +1,33 @@
-require_relative '../config.rb'
 require_relative 'worker.rb'
+require_relative 'config/redis.rb'
 
-module Analynkze
+module Linkorama
   # The dispatcher is always listening on new redis events and
   # dispatches them to the workers
   class Dispatcher
     def initialize
+      puts "[#{name}] Starting dispatcher"
+      $stdout.flush
       @workers = Array.new
       listen!
     end
 
     # Maybe this could be an EM.run loop
     def listen!
-      while 1
-        if url = get_new_url
-          #check for maximum fork number here
-          if pid = fork
-            Process.detach pid
-            @workers << pid
-          else
-            Worker.new url
-            #remove pid from workers when done
+      EM.run do
+        EM.add_periodic_timer(1) do
+          if url = get_new_url
+            puts "[#{name}] Reading #{url}"
+            #check for maximum fork number here
+            if pid = fork
+              Process.detach pid
+              @workers << pid
+            else
+              Worker.new url
+              #remove pid from workers when done
+            end
           end
         end
-        sleep 1
       end
     end
 
@@ -37,7 +41,11 @@ module Analynkze
     private
 
     def get_new_url
-      REDIS.spop 'urls'
+      DB::REDIS.spop 'urls'
+    end
+
+    def name
+      "Dispatcher-#{Process.pid}"
     end
   end
 

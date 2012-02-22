@@ -1,6 +1,6 @@
 require_relative 'util/stopwords.rb'
 
-module Analynkze
+module Linkorama
   class Page
     attr_accessor :title, :keywords
 
@@ -27,7 +27,7 @@ module Analynkze
 
     def filter!(data)
       data.reject!{|word| word.size < 3 }
-      data - Analynkze::STOPWORDS
+      data - Linkorama::STOPWORDS
     end
   end
 end
