@@ -13,17 +13,15 @@ module Analynkze
     # Maybe this could be an EM.run loop
     def listen!
       while 1
-        url = REDIS.spop 'urls'
-        #do this in a fork
-        if url
+        if url = get_new_url
           #check for maximum fork number here
           if pid = fork
             Process.detach pid
+            @workers << pid
           else
             Worker.new url
+            #remove pid from workers when done
           end
-          #Check if url already done (in done queue)
-          #Spawn webyeur worker/actor to spy on ''url''
         end
         sleep 1
       end
@@ -35,7 +33,13 @@ module Analynkze
       end
       exit
     end
+
+    private
+
+    def get_new_url
+      REDIS.spop 'urls'
+    end
   end
 
-Dispatcher.new
+  Dispatcher.new
 end
