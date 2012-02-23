@@ -8,7 +8,6 @@ module Linkorama
     def initialize
       puts "[#{name}] Starting dispatcher"
       $stdout.flush
-      @workers = Array.new
       listen!
     end
 
@@ -21,10 +20,8 @@ module Linkorama
             #check for maximum fork number here
             if pid = fork
               Process.detach pid
-              @workers << pid
             else
               Worker.new url
-              #remove pid from workers when done
             end
           end
         end
@@ -32,7 +29,7 @@ module Linkorama
     end
 
     trap(:TERM) do
-      @workers.each do |w|
+      workers.each do |w|
         w.die!
       end
       exit
@@ -40,8 +37,12 @@ module Linkorama
 
     private
 
+    def workers
+      DB::REDIS.lrange 'lor:workers', 0, -1
+    end
+
     def get_new_url
-      DB::REDIS.spop 'urls'
+      DB::REDIS.spop 'lor:urls'
     end
 
     def name

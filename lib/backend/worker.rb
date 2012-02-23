@@ -41,19 +41,19 @@ module Linkorama
     private
 
     def url_not_previously_done
-      DB::REDIS.sismember('done', @url) ? nil : true
+      DB::REDIS.sismember('lor:done', @url) ? nil : true
     end
 
     def url_done
-      DB::REDIS.sadd('done', @url)
+      DB::REDIS.sadd('lor:done', @url)
     end
 
     def register_self
-      DB::REDIS.lpush 'workers', Process.pid
+      DB::REDIS.lpush 'lor:workers', Process.pid
     end
 
     def unregister_self
-      DB::REDIS.lrem 'workers', 0, Process.pid
+      DB::REDIS.lrem 'lor:workers', 0, Process.pid
     end
 
     def name

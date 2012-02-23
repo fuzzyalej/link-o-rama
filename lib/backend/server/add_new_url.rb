@@ -9,7 +9,7 @@ module Linkorama
     def response(env)
       url = env['params']['data']
       logger.info "[goliath] Adding #{url}"
-      DB::REDIS.sadd 'urls', url
+      DB::REDIS.sadd 'lor:urls', url
       [200, {}, url]
     end
   end
