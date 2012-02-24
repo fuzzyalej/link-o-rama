@@ -1,0 +1,5 @@
+ - Add tests
+ - Limit the # of forks a single Dispatcher can make
+ - Better web content extractor
+ - Better web indexing
+ - Create `populate` script to check performance and scalability
