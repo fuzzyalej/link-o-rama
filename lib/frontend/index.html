@@ -2,15 +2,44 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Backbone example</title>
 
-    <script type="text/javascript" src="includes/jquery.js" />
-    <script type="text/javascript" src="includes/underscore.js" />
-    <script type="text/javascript" src="includes/backbone.js" />
-    <script type="text/javascript" src="includes/mustache.js" />
-    <script type="text/javascript" src="lib/linkorama.js" />
+    <title>Link-O-Rama Deluxe Edition</title>
+
+    <link href="includes/css/bootstrap.css" rel="stylesheet">
+    <link href="includes/css/linkorama.css" rel="stylesheet">
+
+    <script type="text/javascript" src="includes/js/jquery.js"></script>
+    <script type="text/javascript" src="includes/js/underscore.js"></script>
+    <script type="text/javascript" src="includes/js/backbone.js"></script>
+    <script type="text/javascript" src="includes/js/mustache.js"></script>
+    <script type="text/javascript" src="lib/linkorama.js"></script>
   </head>
   <body>
+    <div class="row-fluid" id="app">
+      <div class="span12">
+        <div class="logo">
+          <img src="includes/img/logo.png">
+        </div>
+        <div class="search-box" id="search-box">
+          <form class="form-search">
+            <input type="text" class="input-large search-query">
+            <button class="btn" id="search-button">Search</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span10" id="results">
+        <div class="row result well">
+          <div class="title">
+            The best web ever
+          </div>
+          <div class="contents">
+            blah blah these are the contents or whatever..
+          </div>
+        </div>
 
+      </div>
+    </div>
   </body>
 </html>

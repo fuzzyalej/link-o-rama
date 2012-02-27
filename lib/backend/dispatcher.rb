@@ -29,6 +29,7 @@ module Linkorama
     end
 
     trap(:TERM) do
+      workers = DB::REDIS.lrange 'lor:workers', 0, -1
       workers.each do |w|
         w.die!
       end
@@ -36,10 +37,6 @@ module Linkorama
     end
 
     private
-
-    def workers
-      DB::REDIS.lrange 'lor:workers', 0, -1
-    end
 
     def get_new_url
       DB::REDIS.spop 'lor:urls'

@@ -352,6 +352,7 @@ module Linkorama
     how
     howbeit
     however
+    http
     hundred
     i
     ie
@@ -877,6 +878,7 @@ module Linkorama
     wonder
     would
     wouldn
+    www
     y
     ya
     yes
