@@ -9,6 +9,7 @@ module Linkorama
 
     def response(env)
       query = (env['params']['q'] || '') rescue ''
+      puts "Received search request: #{query}"
       results = DB::MONGO.db['pages'].find({_keywords: query}, fields: ['title', 'url'])
       [200, {}, results.to_a]
     end
