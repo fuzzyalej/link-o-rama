@@ -7,6 +7,7 @@ module Linkorama
       begin
         uri = ENV['MONGOLAB_URI'] || ENV['MONGOHQ_URL'] || ENV['MONGO'] || 'mongodb://localhost'
         CONN = Mongo::Connection.from_uri(uri, pool_size: 2)
+        CONN['linkorama']['pages'].create_index('_keywords')
         raise "No database specified" if CONN.nil?
       rescue Exception => e
         puts "Unable to connect to the mongo server: #{e.message}"

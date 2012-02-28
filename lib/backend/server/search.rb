@@ -8,9 +8,9 @@ module Linkorama
     use Goliath::Rack::Render
 
     def response(env)
-
-      #MONGO.find({'_keywords':'www'}, {'title': 1}, {'url': 1})
-      [200, {}, [{id: '1', name: 'pepe', url: 'www.uva.es'}]]
+      query = (env['params']['q'] || '') rescue ''
+      results = DB::MONGO.db['pages'].find({_keywords: query}, fields: ['title', 'url'])
+      [200, {}, results.to_a]
     end
   end
 end
