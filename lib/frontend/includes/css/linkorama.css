@@ -1,3 +1,10 @@
+body {
+  background-attachment: fixed;
+  background-image: url('/includes/img/bg.jpg');
+  background-position: 0px -60px;
+  background-color: black;
+}
+
 .span12 {
   margin-top: 50px;
   text-align: center;

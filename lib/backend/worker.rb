@@ -18,6 +18,7 @@ module Linkorama
       puts "[#{name}] Parsing #{@url}"
       url_not_previously_done or raise "[#{name}] Already done: #{@url}"
 
+      #TODO: Watch out here! if I do a manual POST with '/etc/passwd'... it gets indexed!
       doc = Nokogiri::HTML(open(@url))
       page = Page.new @url
       page.title = doc.css('title').text
