@@ -21,7 +21,7 @@ module Linkorama
       doc = Nokogiri::HTML(open(@url))
       page = Page.new @url
       page.title = doc.css('title').text
-      page.keywords = doc.search('//text()').text.downcase.scan(/\w+/).sort.uniq
+      page.keywords = doc.search('//text()').text.downcase.split(/\b+/).sort.uniq
 
       col = DB::MONGO.db['pages']
       col.insert(page.to_json)
